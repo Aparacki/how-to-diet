@@ -1,0 +1,262 @@
+name: document
+description: Syncano Socket for document processing
+
+classes:
+  document:
+    - name: name
+      type: string
+    - name: user
+      type: reference
+      target: user
+      filter_index: true
+    - name: file
+      type: file
+    - name: status
+      type: string
+    - name: description
+      type: text
+  document_version:
+    - name: document
+      type: reference
+      target: document
+      filter_index: true
+    - name: file
+      type: file
+    - name: status
+      type: string
+  document_signature:
+    - name: document
+      type: reference
+      target: document
+      filter_index: true
+    - name: signature
+      type: reference
+      target: signature
+      filter_index: true
+    - name: signatory
+      type: reference
+      target: user
+      filter_index: true
+    - name: date
+      type: datetime
+    - name: ipAddress
+      type: string
+    - name: positionX
+      type: integer
+    - name: positionY
+      type: integer
+    - name: width
+      type: integer
+    - name: height
+      type: integer
+    - name: userAgent
+      type: string
+    - name: invitation
+      type: reference
+      target: invitations
+      filter_index: true
+  document_preview:
+    - name: document_version
+      type: reference
+      target: document_version
+      filter_index: true
+    - name: file
+      type: file
+    - name: pageNumber
+      type: integer
+      order_index: true
+      filter_index: true
+    - name: width
+      type: integer
+    - name: height
+      type: integer
+
+endpoints:
+  list:
+    description: endpoint to list documents
+  get-latest-file:
+    description: endpoint to get pdf of the latest document
+    inputs:
+      documentId:
+        description: id of a document for which we want to get latest version of a file
+        type: integer
+        example: 5
+    outputs:
+      success:
+        mimetype: application/pdf
+        description: latest version of pdf document
+        exit_code: 200
+      fail:
+        mimetype: application/json
+        description: failed to get latest version of pdf document
+        exit_code: 400
+  get-invitations:
+    description: endpoint to get invitations
+    inputs:
+      documentId:
+        description: id of a document which we want to get
+        type: integer
+        example: 5
+    outputs:
+      success:
+        mimetype: application/json
+        description: get document object
+        exit_code: 200
+      fail:
+        mimetype: application/json
+        description: failed to get document object
+        exit_code: 400
+  get:
+    description: endpoint to get a document with file:url to endpoint 'get-latest-file'
+    inputs:
+      documentId:
+        description: id of a document which we want to get
+        type: integer
+        example: 5
+    outputs:
+      success:
+        mimetype: application/json
+        description: get document object
+        exit_code: 200
+      fail:
+        mimetype: application/json
+        description: failed to get document object
+        exit_code: 400
+  info:
+    description: get info(id, name, invited, signed, signedByMe) of a document
+    inputs:
+      documentId:
+        description: id of a document
+        type: integer
+        example: 5
+      key:
+        description: key of an invitation (optional)
+        type: string
+    outputs:
+      success:
+        mimetype: application/json
+        description: info about a document
+        exit_code: 200
+      fail:
+        mimetype: application/json
+        description: failed to get info about a document
+        exit_code: 400
+  preview-page:
+    description: get image of a specified pageNumber in document
+    inputs:
+      versionId:
+        description: id of a document_version
+        type: integer
+        example: 5
+      pageNumber:
+        description: pageNumber of a document
+        type: integer
+        example: 5
+    outputs:
+      success:
+        mimetype: image/png
+        description: image of a specified pageNumber in document
+        exit_code: 200
+      fail:
+        mimetype: application/json
+        description: failed to get image of a specified pageNumber in document
+        exit_code: 400
+  preview:
+    description: get whole document with file:url set to endpoint preview-page for every pageNumber
+    inputs:
+      documentId:
+        description: id of a document
+        type: integer
+        example: 5
+      key:
+        description: key of an invitation (optional)
+        type: string
+    outputs:
+      success:
+        mimetype: application/json
+        description: preview pages<images> for whole document
+        exit_code: 200
+      fail:
+        mimetype: application/json
+        description: failed to preview pages<images> for whole document
+        exit_code: 400
+  upload:
+    description: upload the document
+    inputs:
+      file:
+        description: document file .pdf format
+        example: documentName.pdf
+    outputs:
+      success:
+        mimetype: application/json
+        description: document uploaded successfully
+        exit_code: 200
+      fail:
+        mimetype: application/json
+        description: failed to preview pages<images> for whole document
+        exit_code: 400
+  description:
+    description: set decoument description
+    inputs:
+      documentId:
+        description: id of a document
+        type: integer
+        example: 5
+      documentDescription:
+        description: description string
+        type: string
+    outputs:
+      success:
+        mimetype: application/json
+        description: success to change description
+        exit_code: 200
+      fail:
+        mimetype: application/json
+        description: failed to change description
+        exit_code: 400
+  invite:
+    inputs:
+      invitations:
+        description: Invitations list
+        type: array
+        items:
+          type: file
+      documentId:
+        description: Document Id
+        type: integer
+        example: 5
+    outputs:
+      success:
+        exit_code: 200
+      fail:
+        exit_code: 400
+  sign:
+    inputs:
+      signatures:
+        description: signatures array
+        type: array
+        items:
+          type: object
+      documentId:
+        description: document id
+        type: integer
+        example: 5
+    outputs:
+      success:
+        exit_code: 200
+      fail:
+        exit_code: 400
+  remove:
+    inputs:
+      documentId:
+        description: Document Id
+        type: integer
+        example: 5
+    outputs:
+      success:
+        exit_code: 200
+      fail:
+        exit_code: 400
+
+
+

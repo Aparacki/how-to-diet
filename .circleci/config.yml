@@ -1,0 +1,225 @@
+version: 2
+
+setup-env: &setup-env
+  run:
+    name: Setting up env variables
+    command: |
+      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+        env=STAGING
+      else
+        env=PRODUCTION
+      fi
+
+      eval echo "export SYNCANO_PROJECT_INSTANCE=\$${env}_SYNCANO_PROJECT_INSTANCE" >> $BASH_ENV
+      eval echo "export PUBLIC_URL=\$${env}_PUBLIC_URL" >> $BASH_ENV
+      echo 'export SYNCANO_AUTH_KEY=$SYNCANO_AUTH_KEY' >> $BASH_ENV
+
+jobs:
+  install:
+    docker:
+      - image: circleci/node:8-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - cache-{{ .Environment.cache }}-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - cache-{{ .Environment.cache }}-dependencies-
+      - run:
+          name: Create .npmrc with Font Awesome Pro token
+          command: echo @fortawesome:registry=https://npm.fontawesome.com/$FONTAWESOME_TOKEN >> .npmrc
+      - run:
+          name: Installing Dependencies
+          command: npm i --no-audit
+      - save_cache:
+          paths:
+            - node_modules
+          key: cache-{{ .Environment.cache }}-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  build-website:
+    docker:
+      - image: circleci/node:8-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - *setup-env
+      - attach_workspace:
+          at: .
+      - run:
+          name: Build website workspace
+          command: npm run build website
+      - store_artifacts:
+          path: .build/website
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .build/website
+
+  test-lint:
+    docker:
+      - image: circleci/node:8-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Linting Code
+          command: npm run test-lint
+
+  test-size:
+    docker:
+      - image: circleci/node:8-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Checking build size
+          command: npm run test-size
+
+  test-unit:
+    docker:
+      - image: circleci/node:8-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Running unit tests
+          command: npm run test-unit
+      - run:
+          command: npm run build && npm run test:unit
+          working_directory: ~/repo/syncano/document
+      - run:
+          command: npm run build && npm run test:unit
+          working_directory: ~/repo/syncano/document-generator
+      - run:
+          command: npm run build && npm run test:unit
+          working_directory: ~/repo/syncano/invitation
+      - run:
+          command: npm run build && npm run test:unit
+          working_directory: ~/repo/syncano/pdf2image
+      - run:
+          command: npm run build && npm run test:unit
+          working_directory: ~/repo/syncano/signature
+      - run:
+          command: npm run build && npm run test:unit
+          working_directory: ~/repo/syncano/user
+      - run:
+          command: npm run build && npm run test:unit
+          working_directory: ~/repo/syncano/user-invitation
+
+  upload-website:
+    docker:
+      - image: circleci/node:8-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - *setup-env
+      - attach_workspace:
+          at: .
+      - run:
+          name: Uploading website and setting CNAME
+          command: |
+            npx s hosting sync website
+            npx s hosting config website # --cname YOUR_CNAME
+
+  upload-staging-website:
+    docker:
+      - image: circleci/node:8-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - *setup-env
+      - attach_workspace:
+          at: .
+      - run:
+          name: Uploading website and setting CNAME
+          command: |
+            npx s hosting sync website
+            npx s hosting config website -b true # --cname YOUR_CNAME
+
+  deploy-sockets:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8-stretch
+    steps: &deploy-sockets-steps
+      - checkout
+      - *setup-env
+      - attach_workspace:
+          at: .
+      - run:
+          name: Deploy sockets
+          command: npx s deploy
+
+  deploy-staging-sockets:
+    docker:
+      - image: circleci/node:8-stretch
+    working_directory: ~/repo
+    steps: *deploy-sockets-steps
+
+  deploy_postman:
+    working_directory: ~/repo
+    docker:
+      - image: cypress/base:8
+    steps:
+      - attach_workspace:
+          at: .
+      - run: npx s postman DigitalSign
+
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - install
+      - build-website:
+          requires:
+            - install
+      - test-lint:
+          requires:
+            - install
+      - test-unit:
+          requires:
+            - install
+      - deploy-staging-sockets:
+          requires:
+            - install
+          filters:
+            branches:
+              only: master
+      # - test-size:
+      #     requires:
+      #       - build-website
+      - upload-staging-website:
+          requires:
+            - build-website
+          filters:
+            branches:
+              only: master
+      - deploy-sockets:
+          requires:
+            - test-lint
+            # - test-unit
+          filters:
+            branches:
+              only: production
+      - upload-website:
+          requires:
+            - deploy-sockets
+          filters:
+            branches:
+              only: production
+      - deploy_postman:
+          requires:
+            - deploy-staging-sockets
+
+

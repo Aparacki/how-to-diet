@@ -1,0 +1,94 @@
+{
+  "name": "@eyedea-sockets/pdf2image",
+  "version": "0.0.3",
+  "description": "PDF to image converter",
+  "repository": "https://github.com/eyedea-io/syncano-socket-pdf2image.git",
+  "public": true,
+  "author": "Eyedea <hello@eyedea.io> https://eyedea.io",
+  "license": "MIT",
+  "keywords": [
+    "syncano",
+    "socket",
+    "pdf2image"
+  ],
+  "peerDependencies": {
+    "@syncano/cli": "canary"
+  },
+  "dependencies": {
+    "@eyedea/syncano": "0.4.2",
+    "axios": "^0.18.0",
+    "gm": "^1.23.1"
+  },
+  "scripts": {
+    "build": "npm install && npm run build:env && npm run build:src",
+    "build:src": "sh ./bin/compile",
+    "build:env": "sh ./bin/compile-env",
+    "test": "npm run test:lint && npm run test:audit && npm run test:unit",
+    "codecov": "codecov",
+    "test:all": "NODE_ENV=test jest e2e/.*\\.test\\.js unit/.*\\.test\\.js",
+    "test:unit": "PATH=$PATH:.dist/node_modules/.bin NODE_ENV=test jest unit/.*\\.test\\.js",
+    "test:e2e": "NODE_ENV=test jest e2e/.*\\.test\\.js",
+    "test:audit": "npm audit || exit 0",
+    "test:lint": "tslint --fix -c tslint.json ./src/**/*.ts"
+  },
+  "devDependencies": {
+    "@syncano/core": "canary",
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@syncano/test": "0.15.0",
+    "@types/form-data": "^2.2.1",
+    "@types/gm": "^1.18.2",
+    "@types/node": "^10.12.12",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.0.1",
+    "babel-plugin-istanbul": "^5.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "codecov": "^3.0.4",
+    "jest": "^23.6.0",
+    "sinon": "^7.2.0",
+    "ts-jest": "^23.10.5",
+    "tslint": "5.11.0",
+    "tslint-eslint-rules": "5.4.0",
+    "tslint-react": "3.6.0",
+    "typescript": "^3.2.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "globals": {
+      "ts-jest": {
+        "useBabelrc": true,
+        "ignoreCoverageForAllDecorators": true
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "testMatch": [],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/**/*.d.ts"
+    ]
+  },
+  "babel": {
+    "sourceMaps": "inline",
+    "plugins": [
+      "transform-class-properties",
+      "istanbul"
+    ],
+    "presets": [
+      "@babel/preset-typescript",
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "8"
+          }
+        }
+      ]
+    ]
+  }
+}

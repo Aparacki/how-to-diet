@@ -1,0 +1,11 @@
+hosting:
+  website:
+    src: .build/website
+    config:
+      browser_router: false
+dependencies:
+  sockets:
+    user-invitation:
+      version: 0.0.12
+plugins:
+  postman: "@eyedea/syncano-cli-plugin-postman"

@@ -1,0 +1,135 @@
+name: user
+description: user socket
+
+classes:
+  user:
+    - name: firstName
+      type: string
+    - name: lastName
+      type: string
+    - name: avatar
+      type: file
+  recoverPassword:
+    - name: token
+      type: string
+      filter_index: true
+    - name: user_id
+      type: reference
+      target: user
+
+endpoints:
+  register:
+    description: create user
+    inputs:
+      required:
+        - username
+        - password
+        - firstName
+        - lastName
+      properties:
+        username:
+          type: string
+          minLenght: 3
+        password:
+          type: string
+          minLenght: 8
+        firstName:
+          type: string
+        lastName:
+          type: string
+    outputs:
+      success:
+        exit_code: 200
+        description: success
+      fail:
+        exit_code: 400
+        description: fail
+  profile:
+    description: get user profile
+    outputs:
+      success:
+        exit_code: 200
+        description: success
+      fail:
+        exit_code: 401
+        description: fail
+  get:
+    description: get user data
+    inputs:
+      require:
+        - username
+      properties:
+        username:
+          type: string
+    outputs:
+      success:
+        exit_code: 200
+        description: success
+      fail:
+        exit_code: 401
+        description: fail
+  update-profile:
+    description: update user profile
+    inputs:
+      properties:
+        username:
+          type: string
+          description: user name
+        password:
+          type: string
+          description: user password
+        firstName:
+          type: string
+          description: user first name
+        lastName:
+          type: string
+          description: user last name
+    outputs:
+      success:
+        exit_code: 200
+        description: success
+      fail:
+        exit_code: 401
+        description: fail
+  forgot-password:
+    description: user forgot password
+    inputs:
+      require:
+        - username
+      properties:
+        username:
+          type: string
+          description: user email
+    outputs:
+      success:
+        exit_code: 200
+        description: success
+      fail:
+        exit_code: 400
+        description: fail
+  change-password:
+    description: user forgot password
+    inputs:
+      require:
+        - token
+        - password
+      properties:
+        token:
+          types: string
+          description: Proof of credibility
+        password:
+          type: string
+          description: user email
+    outputs:
+      success:
+        exit_code: 200
+        description: success
+      fail:
+        exit_code: 401
+        description: fail
+
+config:
+  RECOVER_PASSWORD_REDIRECT_URL:
+    description: recover password redirect url
+    required: true
+

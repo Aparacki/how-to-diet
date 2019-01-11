@@ -1,0 +1,105 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v8-dependencies-{{ checksum "package.json" }}
+
+      - restore_cache:
+          keys:
+          - v8-magic-dependencies-{{ checksum "./bin/build_magick" }}
+
+      - run: sh ./bin/build_magick
+      - run: npm run build
+      - run: npm install @syncano/cli@canary --no-save
+      - run: npx s compile
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v8-dependencies-{{ checksum "package.json" }}
+
+      - save_cache:
+          paths:
+            - .tmp-build
+            - bin/gm
+            - bin/gs
+            - bin/magick
+          key: v8-magic-dependencies-{{ checksum "./bin/build_magick" }}
+
+      - save_cache:
+          key: v8-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/repo
+
+  test:
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - restore_cache:
+          key: v8-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: npm run test
+
+      - store_artifacts:
+          path: ~/repo/test/.results
+          destination: results
+
+      - run: npm run test
+      - run: npm run codecov
+
+  deploy_staging:
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - restore_cache:
+          key: v8-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run: npm publish --tag canary --access=public
+
+  deploy:
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - restore_cache:
+          key: v8-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run: npm dist-tag add `npm view . name`@`node -p "require('./package.json').version"` latest
+
+workflows:
+  version: 2
+  build-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy_staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: /\d/

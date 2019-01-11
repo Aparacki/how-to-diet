@@ -1,0 +1,62 @@
+name: signature
+description: Signatures of the document
+
+classes:
+  signature:
+    - name: name
+      type: string
+    - name: file
+      type: file
+    - name: user
+      type: reference
+      target: user
+      filter_index: true
+    - name: width
+      type: integer
+    - name: height
+      type: integer
+    - name: invitation
+      type: reference
+      target: invitations
+      filter_index: true
+
+endpoints:
+  list:
+    description: Endpoint to get all users signatures
+    inputs:
+      properties:
+        key:
+          type: string
+    outputs:
+      success:
+        exit_code: 200
+        description: Success
+      fail:
+        exit_code: 400
+        description: Failure
+  remove:
+    description: Endpoint to remove signature
+    inputs:
+      properties:
+        id:
+          type: integer
+    outputs:
+      success:
+        exit_code: 200
+        description: Success
+      fail:
+        exit_code: 400
+        description: Failure
+  upload:
+    description: Endpoint to upload new signature
+    inputs:
+      properties:
+        key:
+          type: string
+    outputs:
+      success:
+        exit_code: 200
+        description: Success
+      fail:
+        exit_code: 400
+        description: Failure

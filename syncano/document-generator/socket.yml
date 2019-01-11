@@ -1,0 +1,48 @@
+name: document-generator
+description: Generate documents from templates
+version: 0.0.7
+keywords:
+  - markdown
+  - document
+  - template
+  - generate
+  - eyedea
+endpoints:
+  generate:
+    description: Generate document
+    inputs:
+      template:
+        type: string
+        description: Template to parse. Supports markdown and template7 engine.
+        example: |
+          # Heading level 1
+          <div>
+            {{#each people}}
+            - {{name}} is a {{role}}
+            {{/each}}
+          </div>
+      data:
+        type: object
+        description: Object of parameters passed to template
+        example: |
+          {
+            "people": [
+              {"name": "Jane Doe", "role": "Product Owner"},
+              {"name": "John Doe","role": "CEO"}
+            ]
+          }
+    outputs:
+      mimetype: text/html
+      success:
+        description: Success
+        example: |
+          <div>
+            <h1>Hello world</h1>
+          </div>
+      fail:
+        exit_code: 400
+        description: Failed
+        example: |
+          {
+            "message": "Failed to generate document."
+          }

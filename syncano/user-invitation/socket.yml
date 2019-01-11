@@ -1,0 +1,121 @@
+name: user-invitation
+description: Basic invitation mechanizm for user/resources
+
+classes:
+  invitations:
+    - name: email
+      type: string
+      filter_index: true
+    - name: key
+      type: string
+      filter_index: true
+    - name: resource_id
+      type: integer
+      filter_index: true
+    - name: resource_type
+      type: string
+      filter_index: true
+    - name: status
+      type: string
+      filter_index: true
+    - name: firstName
+      type: string
+    - name: lastName
+      type: string
+    - name: user
+      type: reference
+      target: user
+
+endpoints:
+  invite:
+    private: true
+    description: Create invitation for a given e-mail
+    inputs:
+      email:
+        type: string
+        description: User e-mail
+        example: joe@mail.com
+      resource_id:
+        type: integer
+        description: ID of the resource related to invitation
+        example: 12345
+      resource_type:
+        type: string
+        description: Type of the resource
+        example: company
+      details:
+        type: object
+        description: Invitation details inform of the object
+        example: |
+          {
+            "company_id": "12345"
+          }
+    outputs:
+      success:
+        exit_code: 200
+        description: Success
+        example: null
+      fail:
+        key: '1232141254215512521'
+        exit_code: 400
+        description: Failed
+        example: {}
+  get:
+    private: true
+    description: Get invitation by invtiation key
+    inputs:
+      key:
+        type: string
+        description: Key of the invitation
+        example: 1232141254215512600
+    outputs:
+      success:
+        exit_code: 200
+      fail:
+        exit_code: 400
+  update:
+    private: true
+    description: Update invitation
+    inputs:
+      key:
+        type: string
+        description: Invitation key
+        example: 1232141254215512600
+      status:
+        type: string
+        description: Status of the invitation
+        example: pending
+    outputs:
+      success:
+        exit_code: 200
+      fail:
+        exit_code: 400
+  list:
+    private: true
+    description: List invitation for given resource ID and type
+    inputs:
+      resource_id:
+        type: integer
+        description: ID of the resource related to invitation
+        example: 12345
+      resource_type:
+        type: string
+        description: Type of the resource
+        example: company
+    outputs:
+      fail:
+        exit_code: 400
+      success:
+        exit_code: 200
+        examples:
+          description: Success
+          example: |
+            [
+              {
+                "email": "joe@mail.com",
+                "key": "1232141254215512521",
+                "details": {
+                  "company_id": "12345"
+                }
+              }
+            ]

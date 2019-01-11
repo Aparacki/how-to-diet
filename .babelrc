@@ -1,0 +1,38 @@
+{
+  "presets": [
+    ["env", {
+      "modules": false,
+      "loose": true,
+      "targets": "> 0.25%, not dead"
+    }],
+    "react"
+  ],
+  "plugins": [
+    "styled-jsx/babel",
+    "dynamic-import-webpack",
+    "transform-runtime",
+    "transform-export-extensions",
+    "transform-class-properties",
+    "transform-object-rest-spread"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        ["babel-plugin-styled-components", {
+          "displayName": true,
+          "fileName": false
+        }]
+      ]
+    },
+    "test": {
+      "presets": [
+        "env",
+        "react"
+      ],
+      "plugins": [
+        "transform-runtime",
+        "transform-es2015-modules-commonjs"
+      ]
+    }
+  }
+}

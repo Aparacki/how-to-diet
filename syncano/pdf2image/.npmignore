@@ -1,0 +1,7 @@
+.tmp-build
+.dist
+coverage
+node_modules
+bin/gm
+bin/gs
+bin/magick
