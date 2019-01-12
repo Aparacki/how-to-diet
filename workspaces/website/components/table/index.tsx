@@ -34,10 +34,6 @@ interface Props {
   store?: Store,
 }
 
-
-
-
-
 @hot(module)
 @inject('store')
 @observer
@@ -49,7 +45,12 @@ class Table extends React.Component<Props> {
     const food = {
       'meat': ['beef,chicken,lamb,pork,turkey'],
       'nuts': ['', 'Almond,sunflower seed', 'peanut,pecan nut,sesame,pumpkin', 'hazelnut,walnut'],
-      }
+      'grain': ['barley,oat,rye,', 'amaranth,gluten,rice,spelled wheat', 'wheat'],
+      'pods': ['kidney,bean jaspe, corn, lentil, peas', 'pinto bean, soya,', '', 'green beans'],
+      'vegetables': ['avocado,garlic,mushroom,olive,batata,potato', 'beet,carrot,lettuce,onion,pepper,radish,spinache,courgette', 'broccoli,cabbage,cauliflower,celery,cucumber,tomato'],
+      'fruits': ['apple,morel,banana,cranberry,grape,lemon,papaya,peach,pear,pineapple,plum,raspberry,Strawberry'],
+      'others': ['cacao,coffie', 'honey,baker yeast,beer yeast', '', 'coconut'],
+    }
     await this.props.store.documentStore.createCategories(categories)
     await this.props.store.documentStore.createProducts(food)
     this.isLoading = false
