@@ -10,12 +10,11 @@ classes:
     - name: name
       type: string
       filter_index: true
-    - name: category
-      type: relation
-      target: categories
-      filter_index: true
     - name: level
       type: integer
+      filter_index: true
+    - name: cat
+      type: string
       filter_index: true
 
 endpoints:
