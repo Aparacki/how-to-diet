@@ -1,0 +1,50 @@
+name: product
+description: product socket
+
+classes:
+  categories:
+    - name: name
+      type: string
+      filter_index: true
+  products:
+    - name: name
+      type: string
+      filter_index: true
+    - name: category
+      type: relation
+      target: categories
+      filter_index: true
+    - name: level
+      type: integer
+      filter_index: true
+
+endpoints:
+  create-category:
+    description: create category
+    inputs:
+      required:
+        - categories
+      properties:
+        categories:
+          type: array
+    outputs:
+      success:
+        exit_code: 200
+        description: success
+      fail:
+        exit_code: 400
+        description: fail
+  create-product:
+    description: create product
+    inputs:
+      products:
+        description: products object
+        type: object
+        items:
+          type: object
+        example: {'name':'apple', 'category', 'fruit'}
+    outputs:
+      success:
+        exit_code: 200
+      fail:
+        exit_code: 400

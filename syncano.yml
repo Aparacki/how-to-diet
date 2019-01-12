@@ -8,4 +8,4 @@ dependencies:
     user-invitation:
       version: 0.0.12
 plugins:
-  postman: "@eyedea/syncano-cli-plugin-postman"
+  postman: '@eyedea/syncano-cli-plugin-postman'

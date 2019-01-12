@@ -34,6 +34,10 @@ interface Props {
   store?: Store,
 }
 
+
+
+
+
 @hot(module)
 @inject('store')
 @observer
@@ -41,19 +45,20 @@ class Table extends React.Component<Props> {
   @observable private isLoading = true
 
   async componentDidMount() {
-    await this.props.store.documentStore.getAllDocuments()
+    const categories = ['meat', 'fish', 'nuts', 'vegetables', 'fruits', 'Grain']
+    const food = {
+      'meat': ['beef,chicken,lamb,pork,turkey'],
+      'nuts': ['', 'Almond,sunflower seed', 'peanut,pecan nut,sesame,pumpkin', 'hazelnut,walnut'],
+      }
+    await this.props.store.documentStore.createCategories(categories)
+    await this.props.store.documentStore.createProducts(food)
     this.isLoading = false
   }
 
   render() {
-    const {documentsList} = this.props.store.documentStore
 
     return (
-      <DocumentsTable
-        loading={this.isLoading}
-        dataSource={documentsList}
-        columns={columns}
-      />
+        <div />
     )
   }
 }

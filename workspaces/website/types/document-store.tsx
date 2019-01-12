@@ -62,6 +62,22 @@ export const DocumentStore = types
         throw err
       }
     }),
+    createCategories: flow(function * (categories: string[]) {
+      try {
+        console.log(categories)
+        yield syncano('product/create-category', {categories})
+      } catch (err) {
+        throw err
+      }
+    }),
+    createProducts: flow(function * (products: object) {
+      try {
+        console.log(products)
+        yield syncano('product/create-product', {products})
+      } catch (err) {
+        throw err
+      }
+    }),
     getDocument: flow(function * (id: string, key: string) {
       const documentId = parseInt(id, 10)
 
