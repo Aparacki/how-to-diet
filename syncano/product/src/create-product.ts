@@ -33,33 +33,31 @@ class Endpoint extends S.Endpoint {
     }
   }
   async convertProducts(products: object) {
-    // console.log(Object.entries(products))
     const converted = []
     Object.entries(products).forEach((item) => {
       converted.push(...this.createProductObject(item))
     })
-    // console.log(converted)
+
     return converted
   }
 
 createProductObject(arr) {
-  const cat = arr[0]
-  const products = []
-
   function splitString(stringToSplit: string, separator:string) {
     return stringToSplit.split(separator)
   }
 
+  const cat = arr[0]
+  const products = []
+
   arr[1].forEach((item, i) => {
     splitString(item, ',').forEach(ytem => {
-     if(item){
+     if (item) {
       products.push({cat, 'level': i, 'name': ytem.toLowerCase()})
      }
     })
   })
 
   return products
-// console.log(products)
 }
 
   async productsExist(products: string[] | any) {

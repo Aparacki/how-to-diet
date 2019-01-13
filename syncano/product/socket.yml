@@ -16,6 +16,22 @@ classes:
     - name: cat
       type: string
       filter_index: true
+  food:
+    - name: name
+      type: string
+      filter_index: true
+    - name: products
+      type: relation
+      target: products
+      filter_index: true
+  dates:
+    - name: date
+      type: string
+      filter_index: true
+    - name: product
+      type: relation
+      target: products
+      filter_index: true
 
 endpoints:
   create-category:
@@ -41,8 +57,21 @@ endpoints:
         type: object
         items:
           type: object
-        example: {'name':'apple', 'category', 'fruit'}
     outputs:
+      success:
+        exit_code: 200
+      fail:
+        exit_code: 400
+  add-products-to-date:
+    description: set time when product was eaten
+    inputs:
+      product:
+        description: products object
+        type: array
+      date:
+        description: products object
+        type: string
+        outputs:
       success:
         exit_code: 200
       fail:
