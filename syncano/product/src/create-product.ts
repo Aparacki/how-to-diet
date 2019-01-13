@@ -29,7 +29,7 @@ class Endpoint extends S.Endpoint {
       const pro = await data.products
       .create(leftProducts)
 
-      return response.json({message: 'Success, created products', pro}, 200)
+      return response.json({message: 'Success, created products', products: pro}, 200)
     } catch (err) {
         console.warn(err)
 
@@ -50,10 +50,8 @@ createProductObject(arr, categories: any) {
     return stringToSplit.split(separator)
   }
   const cat = categories.filter(i => {
-    console.log(i.name, ' = ', arr[0])
     return i.name === arr[0].toLowerCase()
   })
-  console.log('kategoria', cat[0])
 
   const products = []
 

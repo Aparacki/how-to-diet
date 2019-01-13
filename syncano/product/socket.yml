@@ -66,12 +66,9 @@ endpoints:
   add-products-to-date:
     description: set time when product was eaten
     inputs:
-      product:
-        description: products object
+      date_data:
+        description: product and date array
         type: array
-      date:
-        description: products object
-        type: string
         outputs:
       success:
         exit_code: 200
