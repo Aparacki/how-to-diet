@@ -14,7 +14,8 @@ classes:
       type: integer
       filter_index: true
     - name: cat
-      type: string
+      type: reference
+      target: categories
       filter_index: true
   food:
     - name: name
@@ -72,6 +73,13 @@ endpoints:
         description: products object
         type: string
         outputs:
+      success:
+        exit_code: 200
+      fail:
+        exit_code: 400
+  get-all:
+    description: get products and times
+    outputs:
       success:
         exit_code: 200
       fail:

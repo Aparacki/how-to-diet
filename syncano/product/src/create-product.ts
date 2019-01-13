@@ -16,7 +16,11 @@ class Endpoint extends S.Endpoint {
     }
 
     try {
-      const convertProducts = await this.convertProducts(products)
+      const cats: any = await data.categories
+      .fields('id', 'name')
+      .list()
+
+      const convertProducts = await this.convertProducts(products, cats)
       const leftProducts = await this.productsExist(convertProducts)
       if (!leftProducts.length) {
           return response.json({message: 'Product arleady exist'}, 200)
@@ -32,27 +36,31 @@ class Endpoint extends S.Endpoint {
         return response.fail({message: err.message}, 400)
     }
   }
-  async convertProducts(products: object) {
+  async convertProducts(products: object, categories: any) {
     const converted = []
     Object.entries(products).forEach((item) => {
-      converted.push(...this.createProductObject(item))
+      converted.push(...this.createProductObject(item, categories))
     })
 
     return converted
   }
 
-createProductObject(arr) {
-  function splitString(stringToSplit: string, separator:string) {
+createProductObject(arr, categories: any) {
+  function splitString(stringToSplit: string, separator: string) {
     return stringToSplit.split(separator)
   }
+  const cat = categories.filter(i => {
+    console.log(i.name, ' = ', arr[0])
+    return i.name === arr[0].toLowerCase()
+  })
+  console.log('kategoria', cat[0])
 
-  const cat = arr[0]
   const products = []
 
   arr[1].forEach((item, i) => {
     splitString(item, ',').forEach(ytem => {
      if (item) {
-      products.push({cat, 'level': i, 'name': ytem.toLowerCase()})
+      products.push({cat: cat[0].id, 'level': i, 'name': ytem.toLowerCase()})
      }
     })
   })

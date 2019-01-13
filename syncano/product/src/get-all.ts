@@ -6,11 +6,15 @@ class Endpoint extends S.Endpoint {
   ) {
 
     try {
-      const categories = await data.categories
-      .fields('id', 'name')
+      const products = await data.products
+      .fields('id', 'name', 'level', 'cat')
       .list()
 
-      return response.json({message: 'Success', categories}, 200)
+      const times = await data.dates
+      .fields('id', 'date', 'product')
+      .list()
+
+      return response.json({message: 'Success', products, times}, 200)
     } catch (err) {
         console.warn(err)
 

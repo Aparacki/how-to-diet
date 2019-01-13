@@ -41,7 +41,7 @@ class Table extends React.Component<Props> {
   @observable private isLoading = true
 
   async componentDidMount() {
-    const categories = ['meat', 'fish', 'nuts', 'vegetables', 'fruits', 'Grain']
+    const categories = ['meat', 'fish', 'nuts', 'vegetables', 'fruits', 'grain', 'pods', 'others']
     const food = {
       'meat': ['beef,chicken,lamb,pork,turkey'],
       'nuts': ['', 'Almond,sunflower seed', 'peanut,pecan nut,sesame,pumpkin', 'hazelnut,walnut'],
