@@ -27,8 +27,6 @@ class App extends React.Component {
                 <Switch>
                   <Route exact path="/" component={Routes.Index} />
                   <Route path="/dashboard" component={Routes.Dashboard} />
-                  <Route path="/profile" component={Routes.Profile} />
-                  <Route path="/document" component={Routes.Document} />
                   <Route path="/auth/login" component={Routes.Auth.Login} />
                   <Route path="/auth/register" component={Routes.Auth.Register} />
                   <Route path="/auth/logout" component={Routes.Auth.Logout} />
@@ -52,9 +50,9 @@ function getRoutes() {
   return {
     Index: loadable(() => import('./pages/index')),
     Dashboard: loadable(() => import('./pages/dashboard')),
-    Document: loadable(() => import('./pages/document')),
+    // Document: loadable(() => import('./pages/document')),
     Missing: loadable(() => import('./pages/missing')),
-    Profile: loadable(() => import('./pages/profile')),
+    // Profile: loadable(() => import('./pages/profile')),
     Auth: {
       Login: loadable(() => import('./pages/auth/login')),
       Logout: loadable(() => import('./pages/auth/logout')),

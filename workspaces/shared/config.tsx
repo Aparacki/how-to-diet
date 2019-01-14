@@ -1,6 +1,6 @@
 import {color, spacing} from '@shared/utils/css-helpers'
 
-export const APP_TITLE = 'Digital Sign'
+export const APP_TITLE = 'How to diet'
 export const SYNCANO_PROJECT_INSTANCE = process.env.SYNCANO_PROJECT_INSTANCE
 export const SENTRY_DSN = process.env.SENTRY_DSN
 export const RELEASE = process.env.RELEASE

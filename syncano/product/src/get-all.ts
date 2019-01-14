@@ -7,7 +7,7 @@ class Endpoint extends S.Endpoint {
 
     try {
       const products = await data.products
-      .fields('id', 'name', 'level', 'cat')
+      .fields('id', 'name', 'level', 'cat', )
       .list()
 
       const times = await data.dates
