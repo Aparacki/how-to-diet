@@ -44,10 +44,13 @@ export const ProductStore = types
       }
     }),
     getEatenProductByDate: (date: string) => {
-      return self.times.find(item => {
-        return item.date === date})
-        .getEatenProducts()
-        .map(id => self.getProductById(id))
+      const productIds = self.times.find(item => item.date === date)
+
+      return productIds ?
+      (productIds
+      .getEatenProducts()
+      .map(id => self.getProductById(id)))
+      : []
     }
   }))
 

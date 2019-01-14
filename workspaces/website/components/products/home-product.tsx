@@ -18,7 +18,7 @@ class HomeProduct extends React.Component<Props> {
   async componentDidMount() {
     const {productStore} = this.props.store
     await productStore.fetchAll()
-    await console.log(productStore.getEatenProductByDate('13/1/2019'))
+    await console.log(productStore.getEatenProductByDate('14/1/2019'))
   }
   render() {
     const {productStore} = this.props.store
