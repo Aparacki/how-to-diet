@@ -19,7 +19,7 @@ interface Props extends Router.RouteComponentProps<{}> {
 
 @hot(module)
 @inject('store')
-@as.guest(() => <Router.Redirect to="/" />)
+// @as.guest(() => <Router.Redirect to="/" />)
 @observer
 class Dashboard extends React.Component<Props> {
   private readonly title = APP_TITLE
@@ -31,8 +31,8 @@ class Dashboard extends React.Component<Props> {
         <Head>
           <title>{this.title}</title>
         </Head>
-        <Navbar/>
         <HomeProduct />
+        <Navbar/>
       </Page>
     )
   }

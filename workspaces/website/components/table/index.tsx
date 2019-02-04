@@ -51,8 +51,8 @@ class Table extends React.Component<Props> {
       'fruits': ['apple,morel,banana,cranberry,grape,lemon,papaya,peach,pear,pineapple,plum,raspberry,Strawberry'],
       'others': ['cacao,coffie', 'honey,baker yeast,beer yeast', '', 'coconut'],
     }
-    await this.props.store.documentStore.createCategories(categories)
-    await this.props.store.documentStore.createProducts(food)
+    // await this.props.store.documentStore.createCategories(categories)
+    // await this.props.store.documentStore.cr[eateProducts(food)
     this.isLoading = false
   }
 

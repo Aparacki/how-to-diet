@@ -50,7 +50,7 @@ class DocumentDetails extends React.Component<Props> {
               <div className="description_text">Description: </div>
               {document.status === 'uploaded' && this.isAuthor() && (
                 <span className="Document__icon">
-                  <Icon type="edit" style={iconStyle} onClick={() => modal.open('description')} />
+                  {/* <Icon type="edit" style={iconStyle} onClick={() => modal.open('description')} /> */}
                 </span>
               )}
             </div>

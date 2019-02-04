@@ -34,7 +34,7 @@ class App extends React.Component {
                   <Route path="/auth/update" component={Routes.Auth.Update} />
                   <Route component={Routes.Missing} />
                 </Switch>
-                <Modals />
+                {/* <Modals /> */}
               </React.Fragment>
             </BrowserRouter>
           </Provider>

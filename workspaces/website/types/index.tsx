@@ -5,7 +5,7 @@ import {types} from 'mobx-state-tree'
 import {DocumentStore} from './document-store'
 import {Modal} from './modal'
 import {SignStore} from './sign'
-import {ProductStore} from './product-store'
+import {ProductStore, ProductViewStore} from './product-store'
 
 export const Store = types
   .model('Store', {
@@ -15,6 +15,7 @@ export const Store = types
     formStore: types.optional(FormStore, {}),
     signStore: types.optional(SignStore, {}),
     productStore: types.optional(ProductStore, {}),
+    ProductViewStore: types.optional(ProductViewStore, {}),
     // invitationStore: types.optional(InvitationStore, {}),
   })
 
@@ -29,4 +30,4 @@ export {DocumentPage} from './page'
 export {Invitation} from '@website/types/invitation'
 export {Modal} from './modal'
 export {DocumentStore} from './document-store'
-export {ProductStore} from './product-store'
+export {ProductStore, ProductViewStore} from './product-store'

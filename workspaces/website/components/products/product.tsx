@@ -1,12 +1,10 @@
 import {RowNoWrap} from '@website/components/document/styled-details'
 import {Store} from '@website/types'
 // import {Col, Row} from 'antd'
-import {Icon, Spin} from 'antd'
+// import {Icon, Spin} from 'antd'
 import Button from 'antd/lib/button/button'
 import {inject, observer} from 'mobx-react'
 import * as React from 'react'
-import itemTypes from '../signature/itemTypes';
-import { observable } from 'mobx';
 
 interface Props {
   store?: Store,
@@ -16,33 +14,28 @@ interface Props {
 @inject('store')
 @observer
 class HomeProduct extends React.Component<Props> {
-@observable eatenProducts
 
   async componentDidMount() {
     const {productStore} = this.props.store
     await productStore.fetchAll()
   }
 
-  renderProducts() {
-    const {getProductParams, toggleProduct, getTimes} = this.props.store.productStore
-    // return this.eatenProducts = getEatenProductByDate().map((item) => {
-    //   return <li key={item.id} onClick={() => {{toggleProduct(item.id)}}}>{item.name}</li>
-    // })
-    return getTimes().product.map((item) => {
-      const product = getProductParams(item)
-      return <li key={item} onClick={() => {{toggleProduct(item)}}}>{product.name}</li>
-    })
+  getDate(days: number = 0) {
+    const date = new Date((new Date()).valueOf() + 1000 * 60 * 60 * 24 * days)
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const year = date.getFullYear()
+
+    return `${day}/${month} /${year}`
   }
 
   render() {
-    const {products} = this.props.store.productStore
+    const {productStore} = this.props.store
 
-    return products.length ? (
+    return(
       <React.Fragment>
         <React.Fragment>
-          <ul>
-          {this.renderProducts()}
-          </ul>
+ss
         </React.Fragment>
         <style jsx>{`
           :global(.Backlink) {
@@ -53,7 +46,7 @@ class HomeProduct extends React.Component<Props> {
           }
         `}</style>
       </React.Fragment>
-     ) : <Spin />
+    )
   }
 }
 
